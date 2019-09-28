@@ -26,6 +26,7 @@ def ParseCSVFile(fileName, fileID, fileDelimiter):
                     })
         except Exception:
             print('Runtime error reading content of file(s)')
+            print('THIS SHOULD ONLY BE FOUND IN THE EXCPHANDLING BRANCH')
     return returnValues
 
 
