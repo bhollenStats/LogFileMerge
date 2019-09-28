@@ -26,6 +26,7 @@ def ParseCSVFile(fileName, fileID, fileDelimiter):
                     })
         except Exception:
             print('Runtime error reading content of file(s)')
+            print('The program really should end here and now')
     return returnValues
 
 
