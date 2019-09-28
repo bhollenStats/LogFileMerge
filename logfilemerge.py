@@ -12,17 +12,20 @@ def ParseCSVFile(fileName, fileID, fileDelimiter):
     else:
         fType = "UNK"
     with open(fileName) as csvfile:
-        reader = csv.reader(csvfile, delimiter=fileDelimiter)
-        for row in reader:
-            if len(row) > 5:
-                returnValues.append({
-                    'SRC': fType,
-                    'SEV': row[0],
-                    'DATE': row[1],
-                    'TIME': row[2],
-                    'TASK': row[3],
-                    'MSG': row[4]+row[5]
-                })
+        try:
+            reader = csv.reader(csvfile, delimiter=fileDelimiter)
+            for row in reader:
+                if len(row) > 5:
+                    returnValues.append({
+                        'SRC': fType,
+                        'SEV': row[0],
+                        'DATE': row[1],
+                        'TIME': row[2],
+                        'TASK': row[3],
+                        'MSG': row[4]+row[5]
+                    })
+        except Exception:
+            print('Runtime error reading content of file(s)')
     return returnValues
 
 
@@ -66,7 +69,10 @@ file2 = ParseCSVFile(
 allMessages = []
 allMessages = file1 + file2
 
-allMessages.sort(key=sortByTime)
+try:
+    allMessages.sort(key=sortByTime)
+except Exception:
+    print('Runtime error sorting all of the messages')
 
 for row in allMessages:
     print(
