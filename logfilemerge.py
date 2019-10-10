@@ -14,24 +14,24 @@ def ParseCSVFile(fileName, fileID, fileDelimiter):
     with open(fileName) as csvfile:
         try:
             reader = csv.reader(csvfile, delimiter=fileDelimiter)
-            for row in reader:
-                if len(row) > 5:
-                    returnValues.append({
-                        'SRC': fType,
-                        'SEV': row[0],
-                        'DATE': row[1],
-                        'TIME': row[2],
-                        'TASK': row[3],
-                        'MSG': row[4]+row[5]
-                    })
         except Exception:
-            print('Runtime error reading content of file(s)')
-            print('The program really should end here and now')
+            print("Unable to read a line from the file")
+        else:
+            try:
+                for row in reader:
+                    if len(row) > 5:
+                        returnValues.append({
+                            'SRC': fType,
+                            'SEV': row[0],
+                            'DATE': row[1],
+                            'TIME': row[2],
+                            'TASK': row[3],
+                            'MSG': row[4]+row[5]
+                        })
+            except Exception:
+                print("PARSING ERROR at line ", reader.line_num, " of filename ", fileName, ", stopping now.")
     return returnValues
 
-
-def sortByTime(listToSort):
-    return listToSort['TIME']
 
 # Process command line arguments for messages and tracer files
 argsOk = True
@@ -71,12 +71,13 @@ allMessages = []
 allMessages = file1 + file2
 
 try:
-    allMessages.sort(key=sortByTime)
+    allMessages.sort(key = lambda i: (i['DATE'], i['TIME']))
 except Exception:
-    print('Runtime error sorting all of the messages')
+    print('SORTING ERROR: Runtime error sorting all of the messages')
 
 for row in allMessages:
     print(
+        "               ",
         row['SEV'].strip(),
         row['DATE'].strip(),
         row['TIME'].strip(),
